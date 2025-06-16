@@ -1,1 +1,1 @@
-# email-notify-aws-console-activity
+# email-alert-console-activity
