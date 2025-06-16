@@ -67,7 +67,7 @@ jobs:
           echo "Running Terraform action: $ACTION"
       
           if [ "$ACTION" = "apply" ]; then
-            terraform apply tfplan -auto-approve
+            terraform apply -auto-approve
           elif [ "$ACTION" = "destroy" ]; then
             terraform destroy -auto-approve
           else
