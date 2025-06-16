@@ -4,71 +4,98 @@ variable "notification_email" {
 }
 
 variable "cloudtrail_name" {
-  default = "account-activity-trail"
+  description = "Name of the CloudTrail trail"
+  type        = string
+  default     = "account-activity-trail"
 }
 
 variable "s3_bucket_name_prefix" {
-  default = "cloudtrail-activity-logs"
+  description = "Prefix for the CloudTrail S3 bucket"
+  type        = string
+  default     = "cloudtrail-activity-logs"
 }
 
 variable "cloudwatch_log_group_name" {
-  type        = string
   description = "Name of the CloudWatch Log Group for CloudTrail"
+  type        = string
   default     = "demo-cloudtrail-logs"
 }
 
 variable "cloudwatch_log_retention_days" {
-  default = 7
+  description = "Number of days to retain CloudWatch logs"
+  type        = number
+  default     = 7
 }
 
 variable "cloudtrail_role_name" {
-  default = "cloudtrail-cloudwatch-role"
+  description = "IAM role name for CloudTrail to assume"
+  type        = string
+  default     = "cloudtrail-cloudwatch-role"
 }
 
 variable "cloudtrail_policy_name" {
-  default = "cloudtrail-cloudwatch-policy"
+  description = "IAM policy name for CloudTrail to write logs"
+  type        = string
+  default     = "cloudtrail-cloudwatch-policy"
 }
 
-variable "filter_pattern" {
-  default = "{ $.eventName = \"ConsoleLogin\" }"
-}
 
 variable "metric_name" {
-  default = "ConsoleLoginEventCount"
+  description = "Name of the CloudWatch metric"
+  type        = string
+  default     = "ConsoleLoginEventCount"
 }
 
 variable "metric_namespace" {
-  default = "CloudTrailMetrics"
+  description = "Namespace of the CloudWatch metric"
+  type        = string
+  default     = "CloudTrailMetrics"
 }
 
 variable "alarm_name" {
-  default = "ConsoleLoginAlarm"
+  description = "Name of the CloudWatch alarm"
+  type        = string
+  default     = "ConsoleLoginAlarm"
 }
 
 variable "alarm_description" {
-  default = "Triggers on AWS Console login attempts"
+  description = "Description for the CloudWatch alarm"
+  type        = string
+  default     = "Triggers on AWS Console login attempts"
 }
 
 variable "statistic" {
-  default = "Sum"
+  description = "Statistic to apply to the metric"
+  type        = string
+  default     = "Sum"
 }
 
 variable "period" {
-  default = 300
+  description = "Period (in seconds) to evaluate the metric"
+  type        = number
+  default     = 300
 }
 
 variable "evaluation_periods" {
-  default = 1
+  description = "Number of evaluation periods for the alarm"
+  type        = number
+  default     = 1
 }
 
 variable "threshold" {
-  default = 1
+  description = "Threshold value for the alarm"
+  type        = number
+  default     = 1
 }
 
 variable "comparison_operator" {
-  default = "GreaterThanOrEqualToThreshold"
+  description = "Comparison operator for the threshold"
+  type        = string
+  default     = "GreaterThanOrEqualToThreshold"
 }
 
 variable "environment" {
-  default = "dev"
+  description = "Environment name for tagging (e.g. dev, prod)"
+  type        = string
+  default     = "dev"
 }
