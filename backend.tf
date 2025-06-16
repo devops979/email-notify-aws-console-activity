@@ -1,14 +1,16 @@
 terraform {
-  required_version = ">= 1.1.0"
+  required_version = ">= 1.12.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "5.99.1"
+    }
+  }
 
   backend "s3" {
-    bucket  = "balastatefilebucket"
-    key     = "tf/notify"
-    region  = "us-east-1"
-    encrypt = true
-
-    # For Terraform versions below 1.1.0, you need to enable state locking by specifying use_lockfile = true
-    # If you're using Terraform 1.1.0 or later, this is not needed as it's enabled by default
-    # use_lockfile = true
+    bucket       = "demo-usecases-bucket-new"
+    key          = "email-notify/terraform.tftstate"
+    region       = "us-east-1"
+    use_lockfile = true
   }
 }
