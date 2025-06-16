@@ -1,1 +1,1 @@
-notification_email = "balasubba.reddy@hcltech.com"
+notification_email = "anilkumar.padarthi@hcltech.com"

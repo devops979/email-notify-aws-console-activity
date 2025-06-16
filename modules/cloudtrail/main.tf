@@ -2,8 +2,10 @@ resource "random_id" "suffix" {
   byte_length = 4
 }
 
+data "aws_caller_identity" "current" {}
+
 resource "aws_s3_bucket" "trail_bucket" {
-  bucket        = "cloudtrail-activity-logs-${random_id.suffix.hex}"
+  bucket        = "${var.s3_bucket_name_prefix}-${random_id.suffix.hex}"
   force_destroy = true
 
   tags = {
@@ -18,7 +20,7 @@ resource "aws_s3_bucket_policy" "trail_bucket_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = {
           Service = "cloudtrail.amazonaws.com"
         }
@@ -26,11 +28,11 @@ resource "aws_s3_bucket_policy" "trail_bucket_policy" {
         Resource = aws_s3_bucket.trail_bucket.arn
       },
       {
-        Effect    = "Allow"
+        Effect = "Allow"
         Principal = {
           Service = "cloudtrail.amazonaws.com"
         }
-        Action = "s3:PutObject"
+        Action   = "s3:PutObject"
         Resource = "${aws_s3_bucket.trail_bucket.arn}/AWSLogs/${data.aws_caller_identity.current.account_id}/*"
         Condition = {
           StringEquals = {
@@ -42,15 +44,13 @@ resource "aws_s3_bucket_policy" "trail_bucket_policy" {
   })
 }
 
-data "aws_caller_identity" "current" {}
-
 resource "aws_cloudwatch_log_group" "trail" {
-  name              = "/aws/cloudtrail/activity"
-  retention_in_days = 7
+  name              = var.cloudwatch_log_group_name
+  retention_in_days = var.cloudwatch_log_retention_days
 }
 
 resource "aws_iam_role" "cloudtrail_role" {
-  name = "cloudtrail-cloudwatch-role"
+  name = var.cloudtrail_role_name
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
@@ -65,7 +65,7 @@ resource "aws_iam_role" "cloudtrail_role" {
 }
 
 resource "aws_iam_role_policy" "cloudtrail_policy" {
-  name = "cloudtrail-cloudwatch-policy"
+  name = var.cloudtrail_policy_name
   role = aws_iam_role.cloudtrail_role.id
 
   policy = jsonencode({
@@ -82,7 +82,7 @@ resource "aws_iam_role_policy" "cloudtrail_policy" {
 }
 
 resource "aws_cloudtrail" "trail" {
-  name                          = "account-activity-trail"
+  name                          = var.cloudtrail_name
   s3_bucket_name                = aws_s3_bucket.trail_bucket.bucket
   include_global_service_events = true
   is_multi_region_trail         = true
@@ -97,5 +97,3 @@ resource "aws_cloudtrail" "trail" {
     aws_cloudwatch_log_group.trail
   ]
 }
-
-

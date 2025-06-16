@@ -1,6 +1,6 @@
 
 resource "aws_sns_topic" "login_alerts" {
-  name = "console-login-alerts"
+  name = var.login_alerts_name
 }
 
 resource "aws_sns_topic_subscription" "email_sub" {
