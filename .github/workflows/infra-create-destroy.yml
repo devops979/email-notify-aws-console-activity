@@ -53,22 +53,26 @@ jobs:
 
       - name: Perform Action
         run: |
-          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+          ACTION=""
+          
+          if [ "${GITHUB_EVENT_NAME}" = "workflow_dispatch" ]; then
             ACTION="${{ github.event.inputs.action }}"
-          elif [ "${{ github.event_name }}" == "push" ]; then
+          elif [ "${GITHUB_EVENT_NAME}" = "push" ]; then
             ACTION="apply"
           else
-            echo "Unsupported event type: ${{ github.event_name }}"
+            echo "Unsupported event type: ${GITHUB_EVENT_NAME}"
             exit 1
           fi
-
+      
           echo "Running Terraform action: $ACTION"
-
-          if [ "$ACTION" == "apply" ]; then
+      
+          if [ "$ACTION" = "apply" ]; then
             terraform apply tfplan -auto-approve
-          elif [ "$ACTION" == "destroy" ]; then
-            terraform destroy  -auto-approve
+          elif [ "$ACTION" = "destroy" ]; then
+            terraform destroy -auto-approve
           else
             echo "Invalid action specified: $ACTION"
             exit 1
           fi
+        env:
+          GITHUB_EVENT_NAME: ${{ github.event_name }}
