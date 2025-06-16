@@ -68,7 +68,7 @@ jobs:
           if [ "$ACTION" == "apply" ]; then
             terraform apply tfplan -auto-approve
           elif [ "$ACTION" == "destroy" ]; then
-            terraform destroy tfplan -auto-approve
+            terraform destroy  -auto-approve
           else
             echo "Invalid action specified: $ACTION"
             exit 1
